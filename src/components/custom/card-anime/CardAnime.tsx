@@ -2,13 +2,31 @@ import Link from "next/link";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Anime } from "@/interfaces/anime_interface";
+import { useEffect, useState } from "react";
+import { fetchRandomImage } from "@/app/api/api";
+import { LoadingSpinner } from "../loader/LoadingSpinner";
 
 interface Props {
   anime: Anime;
   index: number;
 }
 
-export const CardAnime = ({ anime, index }: Props) => {
+export const CardAnime = ({ anime }: Props) => {
+  const [imageSrc, setImageSrc] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadImage = async () => {
+      try {
+        const src = await fetchRandomImage("wildlife"); // Cambia la categoría según desees
+        setImageSrc(src);
+      } catch (error) {
+        console.error("Error al cargar la imagen:", error);
+      }
+    };
+
+    loadImage();
+  }, []);
+
   return (
     <Link
       href={`/recomender/${anime.id}`}
@@ -16,16 +34,21 @@ export const CardAnime = ({ anime, index }: Props) => {
       className="group bg-card rounded-lg overflow-hidden border border-border hover:border-primary transition-all duration-300 hover:shadow-lg"
     >
       <div className="relative aspect-[3/4] overflow-hidden">
-        <Image
-          src={`https://picsum.photos/id/${index}/400/400`}
-          //   src={`https://pic.re/image?random=${anime.id}`}
-          alt={anime.name}
-          fill
-          className="object-cover transition-transform duration-300 group-hover:scale-105"
-        />
+        {imageSrc ? (
+          <Image
+            src={imageSrc}
+            alt={anime.name}
+            fill
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center bg-gray-200">
+            <LoadingSpinner />
+          </div>
+        )}
         <div className="absolute top-2 right-2">
           <Badge variant="secondary" className="font-bold">
-            ★ {anime.rating}
+            ★ {anime.rating.toFixed(2)}
           </Badge>
         </div>
       </div>

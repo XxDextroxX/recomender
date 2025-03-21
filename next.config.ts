@@ -14,6 +14,11 @@ const nextConfig: NextConfig = {
         hostname: "picsum.photos", // Dominio de las imágenes
         // pathname: "/image/**", 
       },
+      {
+        protocol: "https",
+        hostname: "loremflickr.com", // Dominio de las imágenes
+        // pathname: "/image/**", 
+      },
     ],
   },
 

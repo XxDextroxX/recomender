@@ -16,6 +16,7 @@ export default function Page() {
   if (getRecomender.isError || !getRecomender.data) {
     return <p>No se encontraron animes. Por favor, inténtalo de nuevo.</p>;
   }
+  console.log("recomender", getRecomender.data);
   return (
     <div className="container mx-auto py-8 px-4 dark">
       <h1 className="text-2xl font-bold mb-6">
